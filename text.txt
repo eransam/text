@@ -1,0 +1,29 @@
+USE [Food]
+GO
+/****** Object:  StoredProcedure [dbo].[GetUserTotalByDate]    Script Date: 3/19/2023 9:05:24 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE [dbo].[GetUserTotalByDate]
+
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+SELECT 
+  pd.date, 
+  CONCAT(u.firstName, ' ', u.lastName) AS fullName,
+  SUM(pd.total) AS totalAmount 
+FROM 
+  PurchaseDetailsByUser pd 
+  JOIN users u ON pd.userId = u.userId 
+GROUP BY 
+  pd.date, 
+  CONCAT(u.firstName, ' ', u.lastName)
+ORDER BY 
+  pd.date ASC;
+
+END
